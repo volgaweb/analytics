@@ -17,3 +17,9 @@ $MESS['VW_ANALYTICS_COUNTER_FACEBOOK'] = 'Счетчик Facebook';
 $MESS['VW_ANALYTICS_COUNTER_JIVOSITE'] = 'Живосайт';
 
 $MESS['VW_ANALYTICS_OPTIONS_SITE_TITLE'] = 'Настройки сайта &laquo;#SITE_NAME#&raquo; (#SITE_ID#)';
+
+
+$MESS['VW_ANALYTICS_TITLE_YM_COUNTER'] = 'Настройки счетчика метрики';
+$MESS['VW_ANALYTICS_YMETRIKA_WEBVISOR'] = 'Включен вебвизор';
+$MESS['VW_ANALYTICS_YMETRIKA_ECOMMERCE'] = 'Включен ecommerce';
+$MESS['VW_ANALYTICS_YMETRIKA_ECOMMERCE_LAYER'] = 'Имя контейнера ecommerce';

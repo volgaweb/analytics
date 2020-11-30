@@ -4,12 +4,36 @@
 namespace VW\Analytics\Counter;
 
 
+use Bitrix\Main\Config\Option;
 use VW\Analytics\Counter\abstractCounter;
 
 class ymetrika extends baseCounter implements abstractCounter
 {
 
     protected $preconnectDomains = ['mc.yandex.ru'];
+
+    protected $options = [
+          'clickmap'=> true,
+          'trackLinks'=> true,
+          'accurateTrackBounce'=> true,
+          'trackHash'=> true,
+    ];
+
+    public function __construct(string $counterString)
+    {
+        parent::__construct($counterString);
+        $optionWebvisor = Option::get('vw.analytics','ymetrika_webvisor');
+        if($optionWebvisor == 'Y'){
+            $this->options['webvisor'] = true;
+        }
+
+        $optionEcommerce = Option::get('vw.analytics','ymetrika_ecommerce');
+        $stringEcommerce = Option::get('vw.analytics','ymetrika_ecommerce_layer');
+        if($optionEcommerce == 'Y'){
+            $this->options['ecommerce'] = $stringEcommerce;
+        }
+
+    }
 
     public function getHeaderCounter(): ?string
     {
@@ -35,14 +59,7 @@ class ymetrika extends baseCounter implements abstractCounter
           k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
         })
         (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-        ym(<?=$this->counterString?>, "init", {
-          clickmap: true,
-          trackLinks: true,
-          accurateTrackBounce: true,
-          webvisor: true,
-          trackHash: true,
-          ecommerce: "dataLayer"
-        });
+        ym(<?=$this->counterString?>, "init", <?=\CUtil::PhpToJSObject($this->options)?>);
       </script><?php
         return trim(ob_get_clean());
     }
@@ -63,17 +80,10 @@ class ymetrika extends baseCounter implements abstractCounter
             k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
           })
           (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-          var timeToLoad = new Date().getTime() - mtrkStart
+          var timeToLoad = new Date().getTime() - mtrkStart;
           var bounce = 10000 - timeToLoad + metrikaTimer;
           console.log('Показатель отказов начинается с ' + bounce);
-          ym(<?=$this->counterString?>, "init", {
-            clickmap: true,
-            trackLinks: true,
-            accurateTrackBounce: true,
-            webvisor: true,
-            trackHash: true,
-            ecommerce: "dataLayer"
-          });
+          ym(<?=$this->counterString?>, "init",<?=\CUtil::PhpToJSObject($this->options)?>);
         });
       </script><?php
         return ob_get_clean();

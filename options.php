@@ -23,6 +23,14 @@ $groups = [
             ['id' => 'jivosite', 'name' => Loc::getMessage('VW_ANALYTICS_COUNTER_JIVOSITE')],
         ]
     ],
+    [
+        'name' => Loc::getMessage('VW_ANALYTICS_TITLE_YM_COUNTER'),
+        'options' => [
+            ['id' => 'ymetrika_webvisor', 'name' => Loc::getMessage('VW_ANALYTICS_YMETRIKA_WEBVISOR'), 'type'=>'checkbox','default'=>'Y'],
+            ['id' => 'ymetrika_ecommerce', 'name' => Loc::getMessage('VW_ANALYTICS_YMETRIKA_ECOMMERCE'), 'type'=>'checkbox'],
+            ['id' => 'ymetrika_ecommerce_layer', 'name' => Loc::getMessage('VW_ANALYTICS_YMETRIKA_ECOMMERCE_LAYER'),'default'=>'dataLayer'],
+        ]
+    ],
 //    [
 //        'name' => Loc::getMessage('VW_ANALYTICS_TITLE_FIELDS'),
 //        'options' => [
@@ -62,7 +70,7 @@ foreach ($arSites as $key => $arSite) {
     $arOptions = [];
     foreach ($groups as &$g) {
         foreach ($g['options'] as &$o) {
-            $o['value'] = \Bitrix\Main\Config\Option::get($sModuleId, $o['id'], '', $arSite['LID']);
+            $o['value'] = \Bitrix\Main\Config\Option::get($sModuleId, $o['id'], $o['default']?:'', $arSite['LID']);
         }
     }
     $arOptions = $groups;

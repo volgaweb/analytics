@@ -207,4 +207,18 @@ class Counter
         return '';
       }
     }
+    public function getList(){
+        return $this->list;
+    }
+    public static function getCounter($counter){
+        $instance = self::getInstance();
+        if(in_array($counter,$instance->list)){
+            $counters = $instance->getCounters();
+            $optionsKeys = array_keys($counters['options']);
+            if(in_array($counter,$optionsKeys)){
+                return $counters['options'][$counter];
+            }
+        }
+        return null;
+    }
 }
