@@ -216,4 +216,30 @@ class Webform
             }
         }
     }
+
+    public static function getFieldsValue(){
+        $return = [];
+        foreach (self::$fields as $field) {
+            if (method_exists(__NAMESPACE__ . '\\Fields\\' . $field, 'getData')) {
+                $return[$field] = call_user_func([__NAMESPACE__ . '\\Fields\\' . $field, 'getData']);
+            } else {
+                $return[$field] = null;
+            }
+        }
+        return $return;
+    }
+
+    public static function getMailFields()
+    {
+        $fields = self::getFieldsValue();
+        $return = [];
+        foreach ($fields as $field => &$value) {
+            if (method_exists(__NAMESPACE__ . '\\Fields\\' . $field, 'handleMailValue')) {
+                $return[$field] = call_user_func([__NAMESPACE__ . '\\Fields\\' . $field, 'handleMailValue'], $value);
+            } else {
+                $return[$field] = null;
+            }
+        }
+        return $return;
+    }
 }

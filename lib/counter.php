@@ -181,15 +181,15 @@ class Counter
                 window.removeEventListener("mousemove", ll, false);
                 window.removeEventListener("touchmove", ll, false);
                 window.removeEventListener("resize", ll, false);
-                if (document.readyState == 'complete') {
+                if (document.readyState === 'complete') {
                   cb();
                 } else {
-                  window.addEventListener('load', l, false);
+                  window.addEventListener('load', ll, false);
                 }
                 sessionStorage.setItem(sessionName, 1);
               }
 
-              if (sessionStorage.getItem(sessionName) != 1) {
+              if (sessionStorage.getItem(sessionName) !== 1) {
                 window.addEventListener("scroll", ll, {capture: false, passive: true});
                 window.addEventListener("mousemove", ll, {capture: false, passive: true});
                 window.addEventListener("touchmove", ll, {capture: false, passive: true});
