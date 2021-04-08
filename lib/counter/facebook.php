@@ -4,8 +4,6 @@
 namespace VW\Analytics\Counter;
 
 
-use VW\Analytics\Counter\abstractCounter;
-
 class facebook extends baseCounter implements abstractCounter
 {
 
@@ -18,9 +16,9 @@ class facebook extends baseCounter implements abstractCounter
     public function getHeaderCounter(): ?string
     {
         ob_start(); ?>
-      <noscript><img alt="" height="1" width="1" style="display:none"
-                     src="https://www.facebook.com/tr?id=<?= $this->counterString ?>&ev=PageView&noscript=1"
-        /></noscript>
+        <noscript><img alt="" height="1" width="1" style="display:none"
+                       src="https://www.facebook.com/tr?id=<?= $this->counterString ?>&ev=PageView&noscript=1"/>
+        </noscript>
         <?php
         return trim(ob_get_clean());
     }
@@ -29,35 +27,7 @@ class facebook extends baseCounter implements abstractCounter
     {
         ob_start();
         ?>
-      <script>!function (f, b, e, v, n, t, s) {
-          if (f.fbq) return;
-          n = f.fbq = function () {
-            n.callMethod ?
-              n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-          };
-          if (!f._fbq) f._fbq = n;
-          n.push = n;
-          n.loaded = !0;
-          n.version = '2.0';
-          n.queue = [];
-          t = b.createElement(e);
-          t.async = !0;
-          t.src = v;
-          s = b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '<?=$this->counterString?>');
-        fbq('track', 'PageView');</script><?php
-        return trim(ob_get_clean());
-    }
-
-    public function getHeadCounterLazy(): ?string
-    {
-        ob_start();
-        ?>
-      <script>
-        lazyCounter('FacebookLoaded', 3500, function () {
+        <script data-skip-moving>
           !function (f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function () {
@@ -76,10 +46,40 @@ class facebook extends baseCounter implements abstractCounter
             s.parentNode.insertBefore(t, s)
           }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '<?=$this->counterString?>');
+          fbq('init', '<?= $this->counterString ?>');
           fbq('track', 'PageView');
-        });
-      </script>
+        </script><?php
+        return trim(ob_get_clean());
+    }
+
+    public function getHeadCounterLazy(): ?string
+    {
+        ob_start();
+        ?>
+        <script data-skip-moving>
+          lazyCounter('FacebookLoaded', 3500, function () {
+            !function (f, b, e, v, n, t, s) {
+              if (f.fbq) return;
+              n = f.fbq = function () {
+                n.callMethod ?
+                  n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+              };
+              if (!f._fbq) f._fbq = n;
+              n.push = n;
+              n.loaded = !0;
+              n.version = '2.0';
+              n.queue = [];
+              t = b.createElement(e);
+              t.async = !0;
+              t.src = v;
+              s = b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t, s)
+            }(window, document, 'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '<?= $this->counterString ?>');
+            fbq('track', 'PageView');
+          });
+        </script>
         <?php
         return trim(ob_get_clean());
     }

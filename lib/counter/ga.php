@@ -4,8 +4,6 @@
 namespace VW\Analytics\Counter;
 
 
-use VW\Analytics\Counter\abstractCounter;
-
 class ga extends baseCounter implements abstractCounter
 {
 
@@ -18,19 +16,21 @@ class ga extends baseCounter implements abstractCounter
     {
         ob_start();
         ?>
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $this->counterString ?>"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $this->counterString ?>"
+                data-skip-moving></script>
+        <script data-skip-moving>
+          window.dataLayer = window.dataLayer || [];
 
-        gtag('config', '<?= $this->counterString ?>');
-      </script>
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+
+          gtag('js', new Date());
+
+          gtag('config', '<?= $this->counterString ?>');
+        </script>
         <?php
         return trim(ob_get_clean());
     }
-
-
-
 }

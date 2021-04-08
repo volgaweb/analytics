@@ -2,8 +2,7 @@
 
 namespace VW\Analytics\Counter;
 
-use Bitrix\Main\Loader;
-use Bitrix\Main\Page\Asset;
+use Exception;
 use VW\Main\Meta\DNSPrefetch;
 
 class baseCounter implements abstractCounter
@@ -14,12 +13,11 @@ class baseCounter implements abstractCounter
     public function __construct(string $counterString)
     {
         if (empty($counterString)) {
-            throw new \Exception('Counter identifier is not specified for class ' . __CLASS__);
+            throw new Exception('Counter identifier is not specified for class ' . __CLASS__);
         } else {
             $this->counterString = $counterString;
         }
     }
-
 
 
     public function getPrefetch(): array
@@ -35,6 +33,7 @@ class baseCounter implements abstractCounter
     {
         return $this->getHeaderCounter();
     }
+
     /**
      * базово возвращаем базовые варианты
      * @return string|null
@@ -43,6 +42,7 @@ class baseCounter implements abstractCounter
     {
         return $this->getHeaderCounter();
     }
+
     /**
      * базово возвращаем базовые варианты
      * @return string|null
@@ -54,7 +54,7 @@ class baseCounter implements abstractCounter
 
     public function getHeaderCounter(): ?string
     {
-       return null;
+        return null;
     }
 
     public function getHeadCounter(): ?string

@@ -2,11 +2,13 @@
 
 namespace VW\Analytics;
 
-use Bitrix\Main\Context;
 use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
 use Bitrix\Main\Localization\Loc;
-use VW\Analytics\Fields\yametrika;
+use CEventMessage;
+use CForm;
+use CFormField;
+use CFormResult;
 use VW\Main\Debug;
 
 class Webform
@@ -50,18 +52,18 @@ class Webform
      * Проверить наличие необходимых полей в вебформе, при необходимости добавить
      * @param $WEB_FORM_ID
      * @return bool
-     * @throws \Bitrix\Main\LoaderException
+     * @throws LoaderException
      */
     public static function checkFieldsInForm($WEB_FORM_ID)
     {
         if (!Loader::includeModule('form')) {
             return false;
-        };
+        }
         // храним существующие поля
         $currentFields = [];
 
         // проверяем наличие всех необходимых полей вебформы
-        $rsFields = \CFormField::GetList(
+        $rsFields = CFormField::GetList(
             $WEB_FORM_ID,
             "Y",
             $by = "s_id",
@@ -97,7 +99,7 @@ class Webform
     private static function addFieldToWebform($field, $webformId)
     {
 
-        $cFormField = new \CFormField();
+        $cFormField = new CFormField();
 
         $arFields = array(
             "SID" => $field,
@@ -144,14 +146,14 @@ class Webform
      * @param $field
      * @param null $data
      * @return bool
-     * @throws \Bitrix\Main\LoaderException
+     * @throws LoaderException
      */
     private static function fillFormField($RESULT_ID, $field, $data = null)
     {
         if (!Loader::includeModule('form')) {
             return false;
-        };
-        return \CFormResult::SetField($RESULT_ID, $field, (string)$data);
+        }
+        return CFormResult::SetField($RESULT_ID, $field, (string)$data);
     }
 
     /**
@@ -159,22 +161,22 @@ class Webform
      * @param $field string
      * @param $WEB_FORM_ID
      * @return bool
-     * @throws \Bitrix\Main\LoaderException
+     * @throws LoaderException
      */
     private static function addFieldToMailTemplate($field, $WEB_FORM_ID)
     {
         if (!Loader::includeModule('form')) {
             return false;
-        };
+        }
 
         // получаем почтовое событие для этой вебформы
-        $rsForm = \CForm::GetById($WEB_FORM_ID);
+        $rsForm = CForm::GetById($WEB_FORM_ID);
         $form = $rsForm->Fetch();
         $mailEventType = $form['MAIL_EVENT_TYPE'];
 
         //получаем почтовый шаблон для этого события
         $filter = ['TYPE_ID' => $mailEventType];
-        $messages = \CEventMessage::GetList($by = "site_id", $order = "desc", $filter);
+        $messages = CEventMessage::GetList($by = "site_id", $order = "desc", $filter);
 
         $messTpls = [];
         while ($arMess = $messages->GetNext()) {
@@ -182,14 +184,13 @@ class Webform
         }
         foreach ($messTpls as $messId => &$messTpl) {
             if (!strpos($messTpl['message'], "#" . $field . "#")) {
-                if($messTpl['type']== 'text') {
+                if ($messTpl['type'] == 'text') {
                     $messTpl['message'] .= "
                 
 " . Loc::getMessage('VW_ANALYTICS_WEBFORM_' . $field . '_TITLE') . '
 *******************************
 #' . $field . "#";
-                }
-                elseif($messTpl['type'] == 'html') {
+                } elseif ($messTpl['type'] == 'html') {
                     $messTpl['message'] .= "
                 <br/>
                 <br/>
@@ -200,7 +201,7 @@ class Webform
 
                 $arField['MESSAGE'] = $messTpl['message'];
 
-                $em = new \CEventMessage;
+                $em = new CEventMessage;
                 $res = $em->Update($messId, $arField);
             }
         }
@@ -217,7 +218,8 @@ class Webform
         }
     }
 
-    public static function getFieldsValue(){
+    public static function getFieldsValue()
+    {
         $return = [];
         foreach (self::$fields as $field) {
             if (method_exists(__NAMESPACE__ . '\\Fields\\' . $field, 'getData')) {
