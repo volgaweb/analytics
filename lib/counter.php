@@ -122,7 +122,7 @@ class Counter
             $options = [];
             $templates = [];
             foreach ($this->list as $counter) {
-                $value = Option::get($this->moduleID, $counter);
+                $value = Option::get($this->moduleID, $counter,'',SITE_ID);
                 if (!empty($value)) {
                     $options[$counter] = $value;
                     if (class_exists("\\VW\\Analytics\\Counter\\" . $counter)) {
