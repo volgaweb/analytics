@@ -47,13 +47,9 @@ if ($REQUEST_METHOD == 'POST' && $_POST['Update'] == 'Y') {
     $cache_id = 'vw_counters';
     $cache_path = '/volgaw/counters/';
     $cache->clean($cache_id, $cache_path);
-
     foreach ($req[$sModuleInnerId] as $site => $saveOptions) {
-
         foreach ($saveOptions as $optionName => $optionValue) {
-            if (!empty($optionValue)) {
-                \Bitrix\Main\Config\Option::set($sModuleId, $optionName, $optionValue, $site);
-            }
+            \Bitrix\Main\Config\Option::set($sModuleId, $optionName, $optionValue, $site);
         }
     }
 
