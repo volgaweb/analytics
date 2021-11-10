@@ -5,6 +5,7 @@ namespace VW\Analytics\Counter;
 use Exception;
 use VW\Main\Meta\DNSPrefetch;
 
+abstract class baseCounter implements abstractCounter
 {
     protected $counterString;
     protected $preconnectDomains = [];
