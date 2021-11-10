@@ -44,7 +44,12 @@ $groups = [
 if ($REQUEST_METHOD == 'POST' && $_POST['Update'] == 'Y') {
     $req = \Bitrix\Main\Context::getCurrent()->getRequest()->toArray();
     $cache = \Bitrix\Main\Data\Cache::createInstance();
-    $cache_id = 'vw_counters';
+    //delete plain cache
+    $cache_id = 'vw_counters_0';
+    $cache_path = '/volgaw/counters/';
+    $cache->clean($cache_id, $cache_path);
+    //delete lazy cache
+    $cache_id = 'vw_counters_1';
     $cache_path = '/volgaw/counters/';
     $cache->clean($cache_id, $cache_path);
     foreach ($req[$sModuleInnerId] as $site => $saveOptions) {
