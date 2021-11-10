@@ -5,7 +5,6 @@ namespace VW\Analytics\Counter;
 use Exception;
 use VW\Main\Meta\DNSPrefetch;
 
-class baseCounter implements abstractCounter
 {
     protected $counterString;
     protected $preconnectDomains = [];
@@ -40,7 +39,7 @@ class baseCounter implements abstractCounter
      */
     public function getHeadCounterLazy(): ?string
     {
-        return $this->getHeaderCounter();
+        return $this->getHeadCounter();
     }
 
     /**
@@ -49,7 +48,7 @@ class baseCounter implements abstractCounter
      */
     public function getFooterCounterLazy(): ?string
     {
-        return $this->getHeaderCounter();
+        return $this->getFooterCounter();
     }
 
     public function getHeaderCounter(): ?string
